@@ -1,10 +1,45 @@
-x= 1;
-z = vpa(1+x,20);
-y = vpa(1,20);
-while z > y;
+Desarrolle un programa que permita averiguar cuál es el número más pequeño que puede ser
+sumado a 1 sin que se pierda información (épsilon) y otro que permita calcular el número más
+grande positivo.
+a)
+x=0.1;
+y=1.0;
+z=y+x;
+while z~=1;
+z=y+x;
 x=x/10;
-z = vpa(1+x,20);
+z=y+x;
 end
-x
-x =
-1.0000∗ 10−14
+x=x*10
+
+x= 1*10^-16
+
+b)
+
+while(10^i<inf)
+  i=i+1;
+ end
+exp=1;
+s=''
+
+for i=1:exp
+  s=strcat(s,'0');
+end
+
+n=strings
+for i=1:exp
+  for j=0:9
+    n_2= strcat(n,num2str(j));
+    numero=strcat(n_2,extractAfter(s,i));
+    if(str2double(numero)==inf)
+      n_2=strcat(n,num2str(j-1));
+       break
+     end
+    end
+    n=n_2;
+  end
+  num= str2double(n);
+  disp(n)
+  
+  
+  1,7977 ∗ 10308
