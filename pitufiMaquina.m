@@ -30,7 +30,6 @@ classdef pitufiMaquina < handle
                 out=sum;
             end
         end
-        
         function [out]=binEnteroToDec(num)%%pasa de binario a decimal (solo la parte entera)
             sum=0;
             menos=false;
@@ -39,7 +38,7 @@ classdef pitufiMaquina < handle
             end
             num=abs(num);
             pot2=1;
-            while num~=0
+            while(num~=0)
                 sum=sum+ (mod(num,10)*pot2);
                 num=floor(num/10);
                 pot2=pot2*2;
@@ -50,7 +49,6 @@ classdef pitufiMaquina < handle
                 out=sum;
             end
         end
-        
         function [out]= numEnteroToBin(num)
              s='';
             temp=abs(num);
@@ -92,10 +90,10 @@ classdef pitufiMaquina < handle
             obj.exponente=e;
         end
         function maxNumber(obj) %%calcula max numero
-%            s='';
-%             for i=1: obj.mantisa
-%              s=strcat(s,'1');
-%             end
+           s='';
+            for i=1: obj.mantisa+2+obj.exponente
+             s=strcat(s,'1');
+            end
 %             numm=str2double(s);
 %             s='';
 %             for i=1:obj.exponente
@@ -105,8 +103,7 @@ classdef pitufiMaquina < handle
 %             numm= numm*10^(-obj.mantisa);
 %             nyex=numm*10^(dece);
 %             obj.max=obj.binToDec(nyex);
-              
-             obj.max= obj.maquToDec("1111111111111111");
+             obj.max= obj.maquToDec("11111111111111111");
         end
         function minNumber (obj) %%calcula el mínimo número positivo de la máquina       
             s='';
@@ -137,7 +134,7 @@ classdef pitufiMaquina < handle
             mant=str2double(mant);
             mant=mant*10^(-obj.mantisa);
             exp=str2double(exp);
-            exp=obj.binEnteroToDec(exp);      
+            exp=obj.binEnteroToDec(exp);
             %%interpretar signo del exponente
             if signoE=='0'
                 myex=mant*10^(-exp);
@@ -145,8 +142,8 @@ classdef pitufiMaquina < handle
                 myex=mant*10^(exp);
             end
             %%convertir numero a decimal
-            num=obj.binToDec(num2str(myex));             %cambio aca
-            %%interpretar signo mantisa
+            num=obj.binToDec(myex);
+            %%interpretar signo mantisa=
             if signoM=='0'
                 out=-num;
             else
@@ -239,9 +236,9 @@ classdef pitufiMaquina < handle
                 end
             else
                  if menos
-                    out=-(obj.binEnteroToDec(floor(num)));                 
+                    out=-(obj.binEnteroToDec(num));
                  else
-                    out=obj.binEnteroToDec(floor(num));       
+                out=obj.binEnteroToDec(num);
                  end
             end
             
@@ -305,7 +302,8 @@ classdef pitufiMaquina < handle
             num2=obj.numToMaqu(num2);
             a=obj.maquToDec(num1);
             b=obj.maquToDec(num2);
-            total=a+b;
+            total=numToMaqu(a+b);
+            total=maquToDec(total);
             out=total;
         end %%suma dos numeros decimales insertados por el usuario, interprestados por la máquina
         function [out]= restaDec(obj,num1,num2)
