@@ -1,5 +1,5 @@
-function y = biseccion1(-20,20,tol,nMax)
-f = @(x) e^(-(x^2)+1) + x * sin(x-3) ;
+function biseccion1(xa,xb,tol,nMax)
+f = @(x) log((sin(x))^2 + 1)-1/2;
 fxa = f(xa);
 fxb = f(xb);
 
@@ -8,18 +8,28 @@ if fxa == 0
 else if fxb == 0
     disp(xb)
 else 
-xm = (xa+xb)/2;
-fxm = f(xm);
-i = 1;
-error = tol + 1;
+    xInf=[xa];
+    xSup=[xb];
+    xM=[];
+    fxM=[];
+    vErr=[];
+    xm = (xa+xb)/2;
+    fxm = f(xm);
+    i = 1;
+    error = tol + 1;
      while error > tol && fxm ~= 0 && i < nMax
       if fxa*fxm < 0
         xb = xm;
         fxb = fxm;
-    else 
+      else 
         xa = xm;
         fxa = fxm;
-    end
+      end
+    xInf(i)=[xa];
+    xSup(i)=[xb];
+    xM(i)=[xm];
+    fxM(i)=[fxm];
+    vErr(i)=[error];
  aux = xm;
  xm = (xa+xb)/2;
  fxm = f(xm);
@@ -27,10 +37,20 @@ error = tol + 1;
  i = i + 1;
 end
 if xm == 0
-    dips(xm)
+    %dips(xm)
+    xInf
+    xSup
+    xM
+    fxM
+    vErr
 else if error < tol
-        disp(xm)
+        %disp(xm)
         disp('es una aproximación a la raíz')
+        xInf
+    xSup
+    xM
+    fxM
+    vErr
 else 
         disp('fracasó en ') 
         disp(nMax)

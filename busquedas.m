@@ -1,5 +1,5 @@
-function y = busquedas (x0,delta,nMax)
-f = @(x) log((x^2)+1)+x*cos(6*x+3)-3*x-10;
+function busquedas (x0,delta,nMax)
+f = @(x) log((sin(x))^2 + 1)-1/2;
 fx0 = f(x0);
 if fx0 == 0
     disp(x0)
