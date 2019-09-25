@@ -1,8 +1,10 @@
 function [tabla]=metodoSecante(x0,x1,tol,niter)
 %%open
 %%error abs
+%%vec= ['Iteración' 'x' 'f(x)' 'error'];
+%%Cambiado y correcto
 format long
-f = @(x) exp(x)-(5*x)+2;
+f = @(x) log((sin (x))^2+1)-0.5;
 
 fx0 = f(x0);
 if fx0 == 0
@@ -12,19 +14,23 @@ else
     cont = 0;
     error = tol+1;
     den = fx1-fx0;
+    tabla(1,1)=cont;
+    tabla(1,2)=x0;
+    tabla(1,3)=f(x0);
+    
     while error > tol && fx1 ~= 0 && den ~= 0 && cont < niter
         x2 = x1 - fx1*(x1-x0)/den;
-        error = abs(x2-x1);
+        error = abs(x1-x0);
         x0 = x1;
         fx0 = fx1;
         x1 = x2;
         fx1 = f(x1);
         den = fx1-fx0;
         cont = cont +1;
-        tabla(cont,1)=cont;
-        tabla(cont,2)=x1;
-        tabla(cont,3)=f(x1);
-        tabla(cont,4)=error;
+        tabla(cont+1,1)=cont;
+        tabla(cont+1,2)=x0;
+        tabla(cont+1,3)=f(x0);
+        tabla(cont+1,4)=error;
     end
     if fx1 == 0
         disp(x1);
