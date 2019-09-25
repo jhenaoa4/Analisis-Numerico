@@ -8,6 +8,7 @@ for k=1: (n)
            Ab(i,j)= Ab(i,j)- (mult*Ab(k,j));
        end
     end
+    disp(Ab);
 end
 y= Ab;
 end
