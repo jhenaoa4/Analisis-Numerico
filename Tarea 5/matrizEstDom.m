@@ -4,7 +4,7 @@ for i=1:n
     norma=0;
     for j=1:n
         if j~=i
-            norma=norma+(M(i,j).^2);
+            norma=norma+abs(M(i,j));
         end
     end
     if abs(M(i,i))<= sqrt(norma)
