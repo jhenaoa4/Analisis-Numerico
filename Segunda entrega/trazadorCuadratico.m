@@ -26,6 +26,10 @@ end
 Z(1,1)=1;
 Coeff       =       Z\V;
     j=1;
+    for n=1:length(Coeff)
+        a=Coeff(n,:);
+        fprintf('%f \t ', a);
+    end
     for i=1:N
             hold on
             xi=x(1,i):0.01:x(1,i+1);
