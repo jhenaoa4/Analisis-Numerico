@@ -1,4 +1,4 @@
-function y = TrazadorL(xi,y)
+function [] = TrazadorL(xi,y)
 n = length(xi);
 i = 1;
 coef = [];
@@ -12,6 +12,15 @@ while i<n
     grid on
     i = i + 1;
 end
-coef
-ind
+[m,n]=size(coef);
+fprintf('\n Coeficientes trazadores: \n');
+for i=1:n
+    fprintf('\n %g  %g \n',coef(i),ind(i));
+end
+
+%imprimir trazadores
+fprintf('\n Trazadores: \n');
+for i=1:n
+   fprintf('\n (%g)x+(%g) \n',coef(i),ind(i));
+end
 end
