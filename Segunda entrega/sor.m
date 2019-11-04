@@ -6,7 +6,7 @@ L= -1*tril(A,-1);
 U=-1*triu(A,1);
 T=inv(D-w*L)*((1-w)*D+(w*U))
 C=w*inv(D-w*L)*b
-radio=max(eig(T))
+radio=max(abs(eig(T)))
 
 i=0;
 error=tol+1;
