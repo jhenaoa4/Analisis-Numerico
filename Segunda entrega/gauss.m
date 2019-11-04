@@ -8,7 +8,7 @@ U=-1*triu(A,1);
 T=inv(D-L)*(U)
 C=inv(D-L)*b
 
-radio=max(eig(T))
+radio=max(abs(eig(T)))
 i=0;
 error=tol+1;
 while i<nmax && error>tol
