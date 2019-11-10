@@ -1,0 +1,19 @@
+function [message]=extGS(img,auxX,auxY)
+
+[a,b]=size(auxX);
+message='';
+str='';
+
+for i=1:b
+    num=img(auxX(i),auxY(i));
+    nbin=num2str(double(num));
+    str=strcat(str,nbin);
+end
+
+while size(str)>0
+    str2=extractBetween(str,1,7);
+    str=eraseBewteen(str,1,7);
+    aux=char(bin2dec(str2));
+    message=strcat(message,aux);
+end
+end

@@ -1,0 +1,46 @@
+function [image]=LSBinGS(img,message,auxX,auxY)
+%img=imread('stg.jpg');
+%pasarla de rgb a greyscale
+I = rgb2gray(img);
+%message='love';
+mASCII= dec2bin(double(message));
+
+%build one single string
+[a,b]=size(mASCII);
+str='';
+for i=1:a
+   for j=1:b
+       str=strcat(str,mASCII(i,j));
+   end
+end
+mASCII=str;
+[a,b]=size(mASCII);
+[l,m]= size(I);
+
+
+%Turn Matrix into even values
+for i=1:l
+    for j=1:m
+        if mod(I(i,j),2)==1
+            I(i,j)=I(i,j)-1;
+        end
+    end
+end
+
+for i=1 : b
+
+          bin = dec2bin(I(auxX(i),auxY(j)));
+          bin=  eraseBetween(bin,7,9);
+          char= mASCII(A(i,j));
+          while(size(char)<9)
+          char= strcat('0',char);
+          end
+          splitChar=[extractBetween(char,1,3) extractBetween(char,4,6) extractBetween(char,7,9)];
+          bin= strcat(bin,splitChar(k));
+          I(i,j)=bin2dec(bin);
+          p=p+1;
+
+end
+%%img
+imshow(img)
+end
