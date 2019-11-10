@@ -3,17 +3,15 @@ function [img]=LSBinRGB(img,message,auxX,auxY)
 %%imshow(img)
 %img=120+zeros(2,2,3);
 %%message='love';
-mASCII= dec2bin(double(message));
+%mASCII= double(message)
 [l,m,n]= size(img);
 [a,b]=size(message);
-
     for j= 1:b
-        char= mASCII(j);
+        char= dec2bin(double(message(j)));
         while(size(char)<9)
         char= strcat('0',char);
         end
-        splitChar=[extractBetween(char,1,3) extractBetween(char,4,6) extractBetween(char,7,9)];
-        
+        splitChar = [extractBetween(char,1,3) extractBetween(char,4,6) extractBetween(char,7,9)];
         for k= 1:n
           bin = dec2bin(img(auxX(j),auxY(j),k));
           while(size(bin)<9)
