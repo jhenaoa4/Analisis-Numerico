@@ -1,9 +1,5 @@
 function [img]=LSBinRGB(img,message,auxX,auxY)
 img=imread(img);
-%%imshow(img)
-%img=120+zeros(2,2,3);
-%%message='love';
-%mASCII= double(message)
 [l,m,n]= size(img);
 [a,b]=size(message);
     for j= 1:b
