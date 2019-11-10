@@ -1,5 +1,5 @@
 function [img]=LSBinRGB(img,message,auxX,auxY)
-%%img=imread('stg.jpg');
+img=imread(img);
 %%imshow(img)
 %img=120+zeros(2,2,3);
 %%message='love';
@@ -13,6 +13,7 @@ function [img]=LSBinRGB(img,message,auxX,auxY)
         end
         splitChar = [extractBetween(char,1,3) extractBetween(char,4,6) extractBetween(char,7,9)];
         for k= 1:n
+            img(auxX(j),auxY(j),k)
           bin = dec2bin(img(auxX(j),auxY(j),k));
           while(size(bin)<9)
           bin= strcat('0',bin);
