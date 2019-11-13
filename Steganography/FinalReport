@@ -1,0 +1,733 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[document]{ragged2e}
+\usepackage{tabularx}
+\usepackage{framed}
+\usepackage{color}
+\usepackage[document]{ragged2e}
+\usepackage{wrapfig}\definecolor{shadecolor}{RGB}{200,200,200}
+\usepackage{varwidth}
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\title{Digital Steganography for Images, assisted by Cryptography}
+
+\author{
+Mauricio Castaño Uribe\\
+  Universidad EAFIT\\
+  Medellín, Colombia\\
+\and
+  José Miguel Gil Valencia\\
+  Universidad EAFIT\\
+  Medellín, Colombia\\
+ \and
+  Juliana Henao Arroyave\\
+  Universidad EAFIT\\
+  Medellín, Colombia\\
+ \and
+  Isabel Urrego Gómez\\
+  Universidad EAFIT\\
+  Medellín, Colombia\\
+ \and
+  Gerónimo Zuluaga Londoño\\
+  Universidad EAFIT\\
+  Medellín, Colombia\\
+}
+\date{November 2019}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+\justifying
+The current research was carried out to present the fundamental characteristics of cryptography techniques and steganography techniques in order to apply them together for a better accomplishment of the aim of keeping a conversation secret. With that in mind, first it was thoroughly investigated about the different types of cryptography (public key and private key) and the methods to apply this techniques, next it was implemented the private key methods in MATLAB. Then, it was researched about the fundamentals of steganography and focused in three techniques for hiding messages in digital images, which are: Less significant bit for RGB images, another implementation to RGB pictures and less significant bit in Grey-scale images; this techniques were implemented in MATLAB as well. After a fully comparison of the three previous methods with each other, finally  the cryptography algorithms and the steganography algorithms were implemented together seeking to meet the proposed objective.
+\end{abstract}
+
+\keywords{Steganography, cryptography, secret message, security, LSB, RGB, Grey-Scale, images}
+
+\tableofcontents
+
+\section{Introduction}
+\justifying
+In the data and globalization age, the information interchange is a high significance topic, which great researches and specializations have arisen from, since is not always easy to make these interchanges in a secure and efficient way.\newline
+
+Therefore, one of the most researched fields in the 21st century is the cryptography and that might probably be one of the most used methods for protecting information. There are several non related situations where cryptography is highly used because of its security advantages, such as banks, web pages, etc. Besides, the complexity and maturity of this area comes from a combination of different aspects that involve not only mathematics and computer science but also linguistic and statistics. However,  even if the aim is protecting the information, cryptography might be very susceptible to attacks, since it does not hide the fact that there is something behind the encrypted message. That is the reason why other methods are also being researched, for example Steganography.\newline
+
+The word steganography comes from two Greek words: \textit{steganos} and \textit{graphe}. The first one means covered and the second one means writing. That is exactly what steganography does, hides information within a file that can be from an image, to a video or even an audio file. \newline
+
+On first place it has to be highlighted the principal difference between both techniques, which is that in steganography, a person or group of people, unrelated to the emitter and the receptor of the message, are not aware of the secret hidden in it; as opposed to cryptography, in which it is not always that way, because it is not important that the message after being encrypted has any sense. The principal objective of steganography is that in spite of a third person having the channel in which the secret message will be send, this person can not know that there has been a manipulation of it. In conclusion steganography hides the existence of information whereas cryptography protects the content of the information.\citep{ppp} Even though being in essence different methods, the objective may be the same: hiding and protecting information; as far as it will be demonstrated bellow, it is possible to increase security using both techniques together. This is where the lead question for this investigation came from: Is there a possibility of combining steganography and cryptography to build a much safer way to hide and send information?\newline
+
+This work pretends to answer the question by going further into the main topics of both areas. In steganography the algorithms will be based on the LSB (Least Significant Bit) and there will be some proposed modifications to improve the functions.
+
+
+
+\section{Cryptography}
+\justifying
+To be able to accomplish the objective of this work it is important to go through the main concepts of cryptography which will be explained in this section. \newline
+
+There are two types of encryption, public key and private key, different methods of each class have been developed, but in this case study we will only consider some such as ECB, CBC, CFB and OFB that are ways of encrypting working with key private, and by public key RSA and Difie-Hellman
+\newline It begins explaining from the simplest to the most complex method, to emphasize the differences each time it is staggered and becomes safer, and which method best fits the steganography.\newline 
+
+Then cryptography will be defined in a lax way, this has been worked from the beginning as the way to hide messages through encryption and coding that are responsible for modifying the linguistic representations of the message that you want to hide, making this message in a way or another difficult to understand, this tool allows secure and confidential communication, which makes this tool so popular because at this time of the digital era, secure channels or secure forms of communication are needed.
+\newline Having this definition of cryptography you can pass to the different encryption methods.
+
+\newline 
+We have the ECB (Electronic Code Book Mode) this method is the simplest of all it is to encrypt the message by separating it by blocks and encrypting each block separately, it is a quick method by having the facility of dividing the main message into blocks and encrypt independently but has many disadvantages such as that the encrypting the same message several times, always will have the same result, you can perform dictionary attacks, in an attack can be eliminated blocks and can not account for, unless you have the original message and block capture. The first method is one of the most simple to implement and gives a view of what is cryptography, but has too many weak points.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{ECB.PNG}
+\caption{Electronic Code Book Mode \citep{buch}}
+\end{figure}
+
+\newline In the second we have the CBC (Cipher Block Chaining Mode) is an extension of the ECB method with some added security when encrypting by blocks as in the previous method, adding that when passing from block to encrypt the previous encryption of the block is used to encrypt the block current. An initiation vector is also used to encrypt the first block and after using the encryption that exits the block for the next one, the disadvantages of this method is that it is encrypted sequentially and parts of the message can be captured.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{CBC.PNG}
+\caption{Cipher Block Chaining Mode \citep{buch}}
+\end{figure}
+
+\newline Thirdly we have CFB (Cipher Feedback Mode) is similar to the OFB method - explained later - in terms of producing a Keystream keys, when encrypting the last block of encryption, it also uses an initiation vector like the CBC method, this method allows make a counter at the time of encryption and facilitate decryption in parallel, this method by having the counter makes it easy to know if the message has been altered in terms of block theft, and having a Keystream makes it more complex to decrypt the stolen block.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{CFB.PNG}
+\caption{Cipher Feedback Mode \citep{buch}}
+\end{figure}
+
+\newline Finally , of the private key methods to work we have the OFB (Output Feedback Mode) is a flow encryption that uses Keystreams to encrypt each block and these Keystrims are generated with each encryption of the previous block, advantage of starting the encryption with a random vector, despite being one of the safest in its class has certain disadvantages such as recalculating the Keystream, not decrypted in parallel and performs a counter.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{OFB.PNG}
+\caption{Output Feedback Mode \citep{buch}}
+\end{figure}
+
+\newline Turning to the public key methods, it can be said that they are more secure than those of the private key since the information thief will never have the private keys of the sender or receiver, and with these keys it is the only way to know the true message in a considerably short time while the message is being sent.
+
+\newline On the part of RSA , the message is encrypted and signed, a problem of factorization of whole numbers is generated at the time of performing operations to decrypt, the messages are represented by numbers, and the operations to encrypt are based on two large random prime numbers of order $10^{200}$ and the personal keys are made with prime numbers, the disadvantage of this model is the quantum computation of solving operations.
+
+\newline The Difie-Hellman method is a method to share private keys to perform encryption is based on the fact that each one chooses a private number and in common two numbers are chosen, one that is any cousin P and any generator G, through private numbers and the public are carried out equal operations on both sides to calculate the public keys and the result of these operations is a number that is sent to the other , and through the private keys and the inverse functions an identical secret key is obtained. \citep{buch}
+
+
+
+\section{Steganography}
+\justifying
+Steganography is usually defined as the art of hiding the presence of a secret message at all. This is due to the fact that since ancient Greek people have been using many creative techniques to send secret messages without being discovered. A remarkable example of this is the Herodotus story about a slave sent by master to the Ionian city of Miletus with a secret message tattooed on his scalp. After tattooing, the slave grew his hair back in order to conceal the message. He then journeyed to Miletus and, upon arriving, shaved his head to reveal the message to Aristagoras. The message encouraged Aristagoras to start a revolt against the Persian king \citep{history}.
+
+\newline With the computer revolution and creation of internet, steganography has expanded to digital steganography, and now there are many ways to produce a steganographic product. Today, cryptography is a very common way to hide messages and is a very advanced and refined field, but an encrypted message is very obvious and anyone can clearly see there is a secret communication. On the other hand, the purpose of steganography is to leave no trace of any message. However, the steganography techniques are not as developed as cryptography techniques, but it is still an alternative and complementary tool for keeping a secret message.\citep{bib2}
+Besides, the study of steganography is a relevant topic, not only for the embedding of a message but also for the detection and extraction of one, since these techniques have been suspected as a possible way to exchange information about terrorist attacks, this process is called steganalysis.
+
+\newline  Therefore, to fulfill the purpose of covering secret communication, the main factor is the undetectability, so no algorithm can say if a picture contains a hidden message.
+
+\newline In the steganography process there are three factors which take action in, the emitter, the receptor and the channel (the channel could be a person). The following figure (figure 1) is the model for the scheme of a secret communication using steganography. The embedding function changes depending of the technique used.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{steganoModel.PNG}
+\caption{Steganographic embedding scheme.}
+\end{figure}
+
+\newline In order to control the incorporation of the message in a image there is a secret key which is known only by the emitter and the receptor, this key may be just knowing which method was used, or it can also be a seed for a pseudo-random number to know where is the message. In the case of digital steganography the channel is usually via internet and maybe some people (a warden) can see the picture but they can not know there is a communication hidden, the channel properties are defined by the warden. The warden can be a passive one, an active one and a malicious one; this depends on how much he can modify the message. However, for more security the selection of the channel is a topic to take care of, there are techniques for this selection in proposed by Ross Anderson, Fabien A. Petitcolas (1998) \cite{petitcolas}
+
+\newline Below are some techniques for hiding messages in digital images, there are many techniques developed, in this document we will deal with three of them.
+
+\section{LSB implementation in RGB images}
+\justifying
+An image in a computer is saved as a Matrix in which every position saves the information of a single Pixel. The matrix is usually three-dimensional (I x j x k) and its respective sizes depend on the height, length and color model of the image. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{Matrix2}
+\caption{Matrix of an Image}
+\label{fig:Matrix2}
+\end{figure}
+
+In this case we will talk about an LSB implementation for images with the color model RGB. Therefore, k will be equal 3. This means, that the image can be seen as three layers of I x j matrices and each layer will save the information of each pixel for the weight of the colors: red, green and blue. 
+Here is an illustrative example of a matrix that represents an RGB image: \citep{LSBlibro}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{MatrixColores}
+\caption{Matricial Representation of an Image}
+\label{fig:Matrix2}
+\end{figure}
+
+ \subsection{The embedding algorithm (Intuition)}
+ \justifying
+Now that we understand the computational representation of an image it is time to introduce the concept of LSB. The idea of hiding the information in the least significant bit is to hide each character of the message in the last bits of an \( A_{ijk}\) of the matrix. 
+In order to do that is important to mark that the numbers saved in the matrix are written in binary code and since they can go from 0 to 255 the binary representation has a range 00000000-11111111. Additionally, the ASCII code also assigns values that have no longer than 8 digits and this is allows the hidden message to fit perfectly in the least significant bits. \newline
+
+Let´s explain the LSB algorithm intuitively with an example based on the image \ref{fig:Matrix2iu}. The algorithm is based on the ideas proposed in two different papers: \textit{Enhanced Least Significant Bit algorithm For Image Steganography} \citep{bib4} and \textit{An Improved LSB Based Steganography Technique for RGB Color Images} \citep{bib3}  . However, there were problems detected in those methods because in them, they used the fact that characters in its binary representation have a maximum length of 7 and that does not count the extension to special characters. Therefore, we extended the algorithm for those cases, because the special characters will be used while combining steganography and cryptography.\newline
+
+For this algorithm, the numbers saved on each pixel will be shown on their binary representation as follows: 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{mat2}
+\caption{Binary Values of the Image}
+\label{fig:Matrix2iu}
+\end{figure}
+
+Notice that the numbers were separated in blocks of three and we added a 0 before each number. The last block for each number are the least significant bits, because those digits are the ones that allow us to change its values without changing the number itself the least as possible. For example, in the position  \(A_{121}\) the number is 11101110 and with the additional 0 and the block separation we have 011 101 110 meaning that 110 are the least significant bits. 
+Now we are going to explain the process of message embedding. The number of characters we can hide in this image is 4 because we have 4 pixels. In this case we want to hide the word “love”.
+
+\begin{center}
+ \begin{tabular}{||c c c ||} 
+ \hline
+ Character & ASCII & Binary Representation \\ [0.5ex] 
+ \hline\hline
+ l & 108 & 001 101 100 \\ 
+ \hline
+ o & 111 & 001 101 111 \\
+ \hline
+ v & 118 & 001 110 110 \\
+ \hline
+ e & 101 & 001 100 101 \\
+ \hline
+\end{tabular}
+\end{center}
+
+Using the binary representation of each character we only have to save each block of a character in the same position but in the 3 different layers. For example “l” will be stored in \(A_{111}\), \(A_{112}\) and \(A_{113}\). Meaning that those positions will be changed as follows:
+
+\begin{center}
+ \begin{tabular}{||c c c ||} 
+ \hline
+ Position & Before & After \\ [0.5ex] 
+ \hline\hline
+ \(A_{111}\) & 000 000 000 & 000 000 001 \\ 
+ \hline
+ \(A_{112}\) & 000 000 000 & 000 000 101 \\
+ \hline
+ \(A_{113}\) & 000 000 000 & 000 000 100 \\
+ \hline
+\end{tabular}
+\end{center}
+
+Applying those changes to every position of the matrix we obtain the following:
+\begin{figure}[!htb]
+   \begin{minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[scale=0.3]{myPlot1}
+     \caption{Binary Representation with Embedded Message}
+     \label{fig:Matrix2}
+   \end{minipage}\hfill
+   \begin{minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[scale=0.7]{foto2}
+     \caption{Decimal Representation with Embedded Message}
+     \label{fig:Matrix2}
+   \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{Resultado}
+\caption{Result}
+\label{fig:Matrix2}
+\end{figure}
+
+The success of steganography is being able to send the message so that another person does not know that something is hidden. Therefore, is important that the only thing sent by the emitter is the image. 
+Additionally, we added another safety feature to the embedding and also extraction process: hiding the message in pseudo-random pixels of the image. We say pseudo-random because those values are known by the emitter and receptor but would be difficult for a foreigner to find out the order and the pixels, because there is no pattern on them. In order to do that, we added two vectors to the input of the codes, one for the x values and another one for y values and this is the embedding algorithm. \citep{LSBlibro}
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in RGB: Embedding Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,message,X,Y\\
+\textbf{Initialize:} img \leftarrow image, m \leftarrow message (ASCII)  in binary \\
+\textbf{for} each bit of the message B(i) \textbf{do}\\
+\textbf{for} each layer of img I(k) \textbf{do}\\
+1. Add 0´s to the binary representation of the $i^{\text{\tiny th}}$ character of the message\\
+until it has 9 digits\\
+2. Split each letter of the message into three blocks of three digits\\
+3. Save the $k^{\text{\tiny th}}$ block in the $k^{\text{\tiny th}}$ layer of the pixel in position X(i) and Y(i) \\and in the last three bits (the least significant ones)\\
+\textbf{end for}\\
+\textbf{end for}\\
+stego-image \leftarrow image\\
+\textbf{return} stego-image\\
+\end{varwidth}}
+\end{frame}
+\end{center}
+
+The extraction process follows the same idea in the reverse way, the receptor receives the image and goes through the pixels that contain the information and for each pixel builds the hidden character by extracting and joining the information stored in the least significant bits. This is the algorithm:
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in RGB: Extraction Algorithm}\\ 
+\RaggedRight
+\textbf{Input} stego-image,X,Y\\
+\textbf{Initialize:} img \leftarrow image, m \leftarrow message \quad (ASCII) \quad in \quad binary \\
+\textbf{for} each position of the vectors X(i),Y(i) \textbf{do}\\
+str \leftarrow (empty\quad string)\\
+message \leftarrow (empty\quad string)\\
+\textbf{for} each layer of img I(k) \textbf{do}\\
+1. Take the number in the position X(i), Y(i),k of the image and\\ take its binary representation\\
+2. Add 0's to the binary representation until it has 9 digits\\
+3. Extract the digits in positions 7-9 and concatenate them on the right with str\\
+\textbf{end for}\\
+auxStr \leftarrow character\quad with\quad binary\quad representation\quad str\\
+message \leftarrow message + str\\
+\textbf{end for}\\
+\textbf{return} message\\
+
+\end{varwidth}}
+\end{frame}
+\end{center}
+
+\subsection{Example}
+\justifying
+To ilustrate the embeddig and extraction process with a real implementation, the following text was used:
+
+\centering
+In the deepest ocean\\
+The bottom of the sea\\
+Your eyes\\
+They turn me\\
+Why should I stay here?\\
+Why should I stay?\\
+I would be crazy not to follow\\
+Follow where you lead\\
+Your eyes\\
+They turn me\\
+Turn me on to phantoms\\
+I follow to the edge of the earth\\
+And fall off\\
+Everybody leaves\\
+If they get the chance\\
+And this is my chance\\
+I get eaten by the worms\\
+Weird fishes\\
+Get towed by the worms\\
+Weird fishes\\
+Weird fishes\\
+Weird fishes\\
+I will hit the bottom\\
+Hit the bottom and escape\\
+Escape\\
+I will hit the bottom\\
+Hit the bottom and escape\\
+Escape\\
+(Radiohead: "Weird Fishes/Arpeggi")
+
+\justifying
+Both algorithms were implemented in Matlab and named as two different functions: LSBinRGB and extRGB.
+The first one is the one that hides the message in the picture with the given key (the positions represented by vectors X and Y) while the second one extracts the message. The idea is that the returning image of the first function is the only thing that the emitter sends to the receptor and the key is something they previoulsy agreed and had. This way, it will be more difficult for a foreign person to suspect about a hidden message inside the picture.\newline
+
+\justifying
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.75]{RUN2}
+\caption{LSB in RGB}
+\label{fig:Matrix22}
+\end{figure}
+
+After running the commands shown in Figure \ref{fig:Matrix22}, is important to compare the original image with the stego-image to finally demonstrate that the changes are not visible to the human eye. Moreover, the fact that the changes are subtle adds value to the effectiveness of steganography since there are no visual clues that might expose the use of steganography inside the picture. (See figure \ref{fig:Matrix222})
+
+\justifying
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1.2]{flashRun}
+\caption{Result of LSB in RGB}
+\label{fig:Matrix222}
+\end{figure}
+
+\section{Another Implementation of LSB in RGB}
+\justifying
+An alternative way of steganography in RGB images is hiding the whole information in the last layer, because it can be seen as the least significant one.\newline
+
+In spite of one pixel containing the whole information about a single character, the elements stored in the last layer (blue) for each position will be just single bits of the message on its binary ASCII representation. Therefore, the amount of blue will not have significant changes, maximum one unit. Besides, since the amount of blue is only a percentage of the whole pixel, the stego-image will look exactly like the original one. \newline
+
+To explain the situation there is an example: (Figure \ref{fig:LSBinBlue})
+
+\justifying
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{LSBBlue.JPG}
+\caption{Intuition of LSB in Blue Layer}
+\label{fig:LSBinBlue}
+\end{figure}
+
+Here, the image has only four pixels and only the weights stored in the blue layer are shown. The reason for that is because those are the ones that will suffer a change. The embedding process separates the word in its four bits and saves one bit for each pixel: Black is the first bit, the orange pixel the second, the rose one is the third and at last the blue pixel will save the fourth bit. In particular, the orange and blue pixels will not change at all since their bit values were zeros. At last, the stego-image looks exactly like the orignial one because the changes were not significant.\newline
+
+This implementation of LSB is very succesfull because the image can for sure go unnoticed through a channel. For this instance, the layer used was the blue one but the same process will be also very effective using one of the other two. Furthermore, in a future work there is another possibility that can be explored and is saving the information in one bit but in the layer that has the minor value.
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in Blue Layer: Embedding Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,message,X,Y\\
+\textbf{Initialize:} img \leftarrow blue \quad layer \quad of \quad image, m \leftarrow message \quad (ASCII) \quad  in \quad binary \\
+\textbf{for} each row of img i\\
+\textbf{for} each column of img j\\
+\textbf{if} \(img_{ij}\% 2 ==1\)
+\textbf{then} \(img_{ij} \leftarrow img_{ij}-1\)\\
+\textbf{end for}\\
+\textbf{for} each position of the vectors X(i),Y(i) \textbf{do}\\
+\textbf{if} \(m_i==1\) \textbf{then} \(img_{X(i),Y(i)} \leftarrow img_{X(i),Y(i)}+1\)\\
+\textbf{end for}\\
+stego-image \leftarrow layers \quad 1 \quad and \quad 2 \quad from \quad image \quad and \quad 3 \quad from \quad img\\
+\textbf{return} stego-image\\
+\end{varwidth}}
+\end{frame}
+\end{center}
+ 
+In the extraction process there is something that must be taken into account: a single character is a string of 7 bits but those bits are not hidden together. Therefore, first the algorithm collects all the bits and after that it separates the whole string into groups of seven and then it converts each group into its respective character. \newline
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in Blue Layer: Extracting Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,X,Y\\
+\textbf{Initialize:} img \leftarrow blue \quad layer \quad of \quad image, s\leftarrow empty \quad string \\
+message \leftarrow empty \quad string \\
+\textbf{for} each element of X i\\
+num \leftarrow \(img_{X(i)Y(i)}\)\\
+num2 \leftarrow \(num \% 2\)\\
+nstr \leftarrow string \quad version \quad of \quad num2\\
+s \leftarrow \(s + nstr\)\\
+\textbf{end for}\\
+i \leftarrow 1\\
+\textbf{while} size of s \(>\) 0 \textbf{do}\\
+str2 \leftarrow substring \quad from \quad 1-7 \quad of \quad s\\
+str \leftarrow substring \quad after \quad $7^{\text{\tiny th}}$ \quad position \quad of \quad s \\
+aux \leftarrow character \quad with \quad binary \quad representation \quad str2\\
+message \leftarrow \(message + aux\)\\
+i \leftarrow \(i+1\)\\
+\textbf{end while}\\
+\textbf{return} message\\
+\end{varwidth}}
+\end{frame}
+\end{center} 
+
+\subsection{Example}
+This version of LSB was again implemented in Matlab as two separated functions called LSBinBlue as the embedding process and extBlue for the extraction. To try both functions the message used is the name of one of the most famous paintings of the spanish artist Salvador Dali: Dream Caused by the Flight of a Bee Around a Pomegranate a Second Before Awakening. Addiotionally, the name was hidden inside the painting itself by writing the respective commands. (Figures \ref{fig:blue} and \ref{fig:resultBlue})
+
+\justifying
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.8]{Run3}
+\caption{LSB in RGB (Blue layer)}
+\label{fig:blue}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{tigervs}
+\caption{Result LSB in RGB (Blue layer)}
+\label{fig:resultBlue}
+\end{figure}
+
+
+\section{LSB in Grey-scale images}
+\justifying
+Understanding the matrix representation of images, the concept of grey-scale (GS) images follows the same idea as RGB images. However, in this case there is only one layer and the number saved in each position represents the amount of light of that single pixel. For example, 0 is black because it has no light whereas 255 is the numerical representation of white because is 100\% light.\newline
+
+In particular, it is noticed that the matrix of a Grey-scale image is much simpler than RGB images but it hinders the hiding of information and that is why it requires a different implementation of LSB.\newline
+
+To illustrate how this algorithm works in this type of images, suppose we have an image I = 
+\quad
+\begin{vmatrix} 
+203 & 0 \\
+61 & 124 
+\end{vmatrix}
+and a word W=0011 that we want to hide successfully in the image. Additionally, an auxiliar matrix is needed to determinate the order in which the bits of W are going to be saved, in this particular case we will use A = \quad
+\begin{vmatrix} 
+3 & 2 \\
+4 & 1 
+\end{vmatrix}
+as the auxiliar matrix. (Notice that A and I must have the same size) \newline
+
+The hiding process takes for example the first element of I (\(I_{11}\)) and looks for the value in correspondent position of aux: \(A_{11}=3\) . By doing that, we notice that the third bit of W is going to be stored on the position (\(I_{11}\)) and we just need to add that bit to the number. In that order, (\(I_{11}\)) goes from 203 to 204. By following the same steps with the other (\(I_{ij}\)), the first bit of W will be on (\(I_{22}\)), the second on (\(I_{12}\)) and the fourth on (\(I_{21}\)). Finally, the remaining stego-image will be \(I_s=\)
+\quad
+\begin{vmatrix} 
+204 & 0 \\
+62 & 124 
+\end{vmatrix}
+\citep{LSBgrey}
+
+A visual representation of those matrices is shown in the following image:\newline
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{Grscale}
+\caption{Result}
+\label{fig:Matrix2}
+\end{figure}
+
+Altough the some of the colors were changed, that changes the number maximum in one unity and that is why those changes are not visible.\par
+
+This method seems to be very effective, since it just needs the binary representation of the message, what in comparison to the previous one represents a less number of computational operations because it needed the whole matrix in base two.\
+
+
+However, while building the algorithm three main problems were identified:\newline
+1. The person who receives \(I_s\) can not know if either the pixel was changed or not without having the original image\newline
+2. This method adds one to the value in the matrix if the bit that the pixel must save is a 1. Unfortunately, it fails in the case of having a white pixel that should save a 1, since 255 is the maximum value for light intensity.\newline
+3. The idea of an auxiliar matrix limitates the possible messages to only the ones that occupy the whole matrix
+
+To deal with these situations the following solution was used while hiding the message:\newline
+1. Initialize the image by turning all the odd pixel values into their previous even one. For example \(I=5\) changes to \(I=4\). By doing that all the numbers stored in the matrix will end in 0 on its binary representation.\newline
+2. Add 1 to the pixel's value if the bit you want to hide there is a 1. Otherwise keep it the same. That way you fix the problems previously mentioned. The person that receives \(I_s\) identifies easily changes in the pixels because even numbers will represent 0's and odd ones will be 1's. Besides, the problem with the white pixel will also be solved.\newline
+Additionally, instead of using an auxiliar matrix, the key will be the same as in the previous implementations of LSB, two vectors of xy coordinates.\newline
+
+And that is how the following algorithms were built.
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in GS: Embedding Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,message,X,Y\\
+\textbf{Initialize:} img \leftarrow image, m \leftarrow message \quad (ASCII) \quad in \quad binary \\
+\textbf{for} each row of the img i\\
+\textbf{for} each column of the img j\\
+\textbf{if} \(img_{ij}\% 2 ==1\)
+\textbf{then} \(img_{ij} \leftarrow img_{ij}-1\)\\
+\textbf{end for}\\
+\textbf{for} each position of the vectors X(i),Y(i) \textbf{do}\\
+\textbf{if} \(m_i==1\) \textbf{then} \(img_{X(i),Y(i)} \leftarrow img_{X(i),Y(i)}+1\)\\
+\textbf{end for}\\
+stego-image \leftarrow image\\
+\textbf{return} stego-image\\
+
+\end{varwidth}}
+\end{frame}
+\end{center}
+
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in GS: Extracting Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,X,Y\\
+\textbf{Initialize:} img \leftarrow image, s\leftarrow empty \quad string,
+message \leftarrow empty \quad string \\
+\textbf{for} each element of X i\\
+num \leftarrow \(img_{X(i)Y(i)}\)\\
+num2 \leftarrow \(num \% 2\)\\
+nstr \leftarrow string \quad version \quad of \quad num2\\
+s \leftarrow \(s + nstr\)\\
+\textbf{end for}\\
+i \leftarrow 1\\
+\textbf{while} size of s \(>\) 0 \textbf{do}\\
+str2 \leftarrow substring \quad from \quad 1-7 \quad of \quad s\\
+str \leftarrow substring \quad after \quad $7^{\text{\tiny th}}$ \quad position \quad of \quad s \\
+aux \leftarrow character \quad with \quad binary \quad representation \quad str2\\
+message \leftarrow \(message + aux\)\\
+i \leftarrow \(i+1\)\\
+\textbf{end while}\\
+\textbf{return} message\\
+\end{varwidth}}
+\end{frame}
+\end{center} 
+
+
+\subsection{Example}
+\justifying
+In this case the text used is one of Einstein's most famous quotes:
+
+\centering
+"Look deep into nature, and then you will understand everything better."\\
+-Einstein\newline
+
+The two functions implemented in Matlab were named LSBinGS for the embedding function and extGS for the extraction one. The requirment for the picture is using a greyscale image that has only two dimensions and for the ilustrating example we used a picture of Albert Einstein himself, probably the most famous one. The running test can be seen in figure \ref{fig:runGs} and the result in figure \ref{fig:einstein}.
+\justifying
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.8]{GSRun}
+\caption{LSB in Greyscale}
+\label{fig:runGs}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{Einstein2000}
+\caption{Result of LSB in Greyscale}
+\label{fig:einstein}
+\end{figure}
+
+\section{Comparison of the LSB implementations}
+To compare the three implementations previously mentioned, different aspects were taken into account such as the image used, the message, the stego-images and the algorithmic complexity. The following tables show the conclusions made. \newline
+
+\begin{center}
+\begin{tabular}{ | m{5em} | m{4 cm}| m{4 cm} | m{4 cm}| } 
+\hline
+\justifying
+Aspect & LSB in RGB & LSB in Blue Layer & LSB in GS\\ 
+\hline
+Image used for embedding process & 
+This algorithm had the only restriction of requiring an RGB image. In the proofs made there were no needs to look for another picture, but it might be some cases were the number of characters of the message exceeds the number of pixels.
+& This method requires an RGB image. Additionally, while doing some running tests, there were some images where the hiding process could not be made because the length of the message exceed the number of pixels available. Is important to make the comparison with the LSB in RGB method because in that one you could use 9 bits for one single position whilst in this case one pixel could be assigned to one pixel at most.
+& This method uses only Grey Scale images, in some cases the image used was RGB but it was transformed into GS using Matlab commands. This adds an immediate restriction because the positions available is the third part of RGB images. Nevertheless, it had the same problems  exposed in LSB in Blue Layer because in that case the layer used behaves equally as the single layer of grey-scale images\\ 
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{5em} | m{4 cm}| m{4 cm} | m{4 cm}| } 
+\hline
+\justifying
+Aspect & LSB in RGB & LSB in Blue Layer & LSB in GS\\ 
+\hline
+Message & The length of the message can have a size less or equal to the number of pixels. This means, using an image of 546x233, the length can be at most 127218 and that includes spaces as a character & 
+Since the ASCII representation of characters has a maximum value of 255 using the extensions for special characters (the normal ones go until 127) and its binary representation is of length 8, the upper bound for the length of the message is \(n/8\) where n is the number of pixels. This is using the worst case that each character has binary representation of length 8.  &
+In this case, the length of the message has also an upper bound of \(n/8\) where n is the number of pixels of the image. For example if the image has a size 46x16, the message must not exceed 92 characters including spaces.\\ 
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{5em} | m{4 cm}| m{4 cm} | m{4 cm}| } 
+\hline
+\justifying
+Aspect & LSB in RGB & LSB in Blue Layer & LSB in GS\\ 
+\hline
+Stego-Image & Although this method was in the other aspects the best option, in the resulting image is the one that suffers more changes. Again, a pixel hides the information of a single character in the last three bits of each layer, meaning that the endings of the values can change from 000 to 111 and that increases (or decreases) the values 7 units. In the worst case all the three layers of the pixel increase or decrease by 7 units and that would be more visible for images with just a few pixels. An illustration of the situation can be found in figure \ref{fig:gris}, even if it is a subtle change it is more visible than increasing it just by one.
+& The problem that the stego-image might present with this method is that more pixels are changed and not only the ones that contain the information, the reason is because at one point the whole matrix turned its values into even values. If all the values were odds, the only pixels that will remain unchanged will be the ones storing a 1 inside them. However, this situation can also be seen as an advantage in the field of security, since an attacker with the original image might think that pixels that do not contain information do have information.
+& In the previously mentioned aspects, this method seemed to work much alike the LSB in GS but this aspect is probably the one that separates them. This algorithm not only just increases the values of the pixels in one unit, because in this particular case the changes are suffered just by one of the layers meaning that the colors will be changed less than in LSB in RGB and LSB in GS. That makes this implementation the best option in this aspect. \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{gris}
+\caption{Changes in Stego-Image of LSB in RGB}
+\label{fig:gris}
+\end{figure}
+
+\begin{center}
+\begin{tabular}{ | m{5em} | m{4 cm}| m{4 cm} | m{4 cm}| } 
+\hline
+\justifying
+Aspect & LSB in RGB & LSB in Blue Layer & LSB in GS\\ 
+\hline
+Algorithmic Complexity &
+Embedding and extraction are O(n), where n is the size of the message.
+& Embedding Algorithm is O(m x n), where m and n are the dimensions of the image. The Extraction Algorithm is O(n) where n is the length of the message.
+& Embedding Algorithm is O(m x n), where m and n are the dimensions of the image. The Extraction Algorithm is O(n) where n is the length of the message.\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\section{Steganography assisted by Cryptography}
+After studying steganography and cryptography it can be said that both of them are very effective techniques for keeping a conversation or a message covered, and may have the same objectives. However, as they have a lot of advantages they also have a lack of security in some way. Cryptography has a great level of security in terms of complexity of decryption, but if the aim of the emitter is to not raise suspicion about the message, here is where cryptography fails and this is when steganography comes into play. As well, steganography fails when the warden of the channel suspects something, in this case it will be easy for the warden to disembed the message, but if the text is encrypted then it will be so hard for the warden to read the message.
+
+\\So after this analysis it was concluded that the combination of both techniques is a very effective way to keep a secret conversation between people. Hence, the algorithm to implement this combination was built, based on the ones that were already made. We used the LSB in RGB steganography technique, but the algorithm work for every steganography technique.
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in RGB with cryptography: Encrypt and Embedding Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,message,X,Y,Key,n\\
+\textbf{Initialize:} encryptedM \leftarrow encrypt(message, Key,n)\\
+\textbf{Initialize:} stego-image \leftarrow LSBinRGB(image,encM,X,Y)\\
+\textbf{return} stego-image\\
+\end{varwidth}}
+\end{frame}
+\end{center}
+
+\begin{center}
+\begin{frame}
+\centering
+\fbox{\begin{varwidth}{\textwidth}
+\centering
+\textbf{LSB in RGB with cryptography: Extraction and Decrypt Algorithm}\\ 
+\RaggedRight
+\textbf{Input} image,X,Y,Key,n\\
+\textbf{Initialize:} encryptedM \leftarrow extRGB(image,X,Y)\\
+\textbf{Initialize:} decryptedM \leftarrow decrypt(encryptedM,Key,n)\\
+\textbf{print} decryptedM\\
+\textbf{return} decryptedM\\
+\end{varwidth}}
+\end{frame}
+\end{center}
+
+\subsection{Example}
+\justifying
+To ilustrate the embeddig and extraction process assisted by criptography with a real implementation, the following text was used:
+
+\centering
+Because the world is round it turns me on\\
+Because the world is round, ah\\
+Because the wind is high it blows my mind\\
+Because the wind is high, ah\\
+Love is old, love is new\\
+Love is all, love is you\\
+Because the sky is blue, it makes me cry\\
+Because the sky is blue, ah\\
+Ah, ah, ah, ah\\
+(The Beatles: "Because")
+
+\justifying
+The algorithms were implemented in MATLAB, the fuctions names are; encryptInRGB for the one which encrypt the message an embed it in the image, and decryptInRGB for the one which extract the message from the image and decrypt it.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.75]{stegocrypt1.PNG}
+\caption{Run of LSB in RGB with cryptography}
+\label{fig:Matrix2}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.7]{stegocrypt2}
+\caption{Run of LSB in RGB with cryptography}
+\label{fig:Matrix2}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{stegocrypt3}
+\caption{Run of LSB in RGB with cryptography}
+\label{fig:Matrix2}
+\end{figure}
+
+\justifying
+After running the commands shown above (Figure 21, 22, 23) it can be seen in Figure 24 that the changes made on the original image are invisible to the eye, so it can be said the process was successful; and the extracted message is the same as the original.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{pinavs}
+\caption{Changes in Stego-Image of LSB in RGB with a crypto message}
+\end{figure}
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
